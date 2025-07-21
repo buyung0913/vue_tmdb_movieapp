@@ -1,17 +1,20 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <router-view />
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script setup>
+import { watchEffect } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from './stores/auth'
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
+const auth = useAuthStore()
+const router = useRouter()
+
+watchEffect(() => {
+  if (!auth.isAuthenticated && router.currentRoute.value.path !== '/login') {
+    router.push('/login')
   }
-}
+})
 </script>
 
 <style>
